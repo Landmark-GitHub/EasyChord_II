@@ -1,103 +1,119 @@
 import asyncio
 from pyppeteer import launch
 
-async def simulator(url, id):
+async def load_data(id: int):
+    
+    data = []
+    
+    # Content Selectors
+    selectors = {
+        ##post-363420 > section:nth-child(1) > div > div > div.single-cover-header > div.single-cover-header-info > div > h1
+        "name": f"#post-{id} > section:nth-child(1) > div > div > div.single-cover-header > div.single-cover-header-info > div > h1",
+        "key": f"#post-{id} > section:nth-child(4) > div.single-key > div.single-key__select > div",
+        "capo": f"#post-{id} > section:nth-child(4) > div.single-key > div.single-key__desc",
+        "image": f"#post-{id} > section:nth-child(1) > div > div > div.single-cover-header > div.single-cover-header__thumbnail > img",
+        "chord": f"#post-{id} > section:nth-child(2) > div.archive-desc > p",
+        "text": f"#post-{id} > section:nth-child(5) > div > div"
+    }
+
+    # Elements retrieval with individual try-except blocks
+    elements = {}
+    for key, selector in selectors.items():
+        try:
+            elements[key] = await page.waitForSelector(selector, {'timeout': 60000})
+        except Exception as e:
+            print(f"Error waiting for selector {selector}: {e}")
+            elements[key] = None
+
+    # Extract data if elements are found
+    data_dict = {}
+    for key, element in elements.items():
+        if element:
+            if key == "image":
+                data_dict[key] = await page.evaluate('(element) => element.getAttribute("src")', element)
+            else:
+                data_dict[key] = await page.evaluate('(element) => element.textContent', element)
+
+    if "chord" in data_dict:
+        chords = [i.replace('คอร์ด ', '') for i in data_dict["chord"].split(', ')]
+    else:
+        chords = []
+
+    if "text" in data_dict:
+        lyrics = separate_lyrics_and_chords(data_dict["text"], chords)
+    else:
+        lyrics = []
+
+    data.append({
+        "title": data_dict.get("name", ""),
+        "key": data_dict.get("key", ""),
+        "capo": data_dict.get("capo", ""),
+        "image": data_dict.get("image", ""),
+        "chord": chords,
+        #"origin": data_dict.get("text", ""),
+        "text": lyrics,
+        #"text": data_dict["text"]
+    })
+    
+    return data
+
+def separate_lyrics_and_chords(text, chords):
+    lines = text.strip().split('\n')
+    result = []
+    for line in lines:
+        if "INTRO" in line or "INSTRU" in line:
+            result.append({
+                'text': line.strip(),
+                'chords': '',
+                'rest_text': ''
+            })
+        elif any(chord in line for chord in chords):
+            for chord in chords:
+                if chord in line:
+                    parts = line.split(chord)
+                    resultText = parts[0].strip()
+                    restText = parts[1].strip()
+                    result.append({
+                        'text': resultText,
+                        'chords': chord,
+                        'rest_text': restText
+                    })
+                    break
+        else:
+            result.append({
+                'text': line.strip(),
+                'chords': '',
+                'resttext': ''
+            })
+
+    return result
+
+async def simulator(url, id, action, count):
     try:
         browser = await launch(headless=True, executablePath='C:/Program Files/Google/Chrome/Application/chrome.exe')
         page = await browser.newPage()
         await page.goto(url, {'waitUntil': 'networkidle2', 'timeout': 0})
-
-        data = []
-
-        # Content Selectors
-        selectors = {
-            "name": f"#post-{id} > section:nth-child(1) > div > div > div.single-cover-header > div.single-cover-header-info > div > h1",
-            "key": f"#post-{id} > section:nth-child(4) > div.single-key > div.single-key__select > div",
-            "capo": f"#post-{id} > section:nth-child(4) > div.single-key > div.single-key__desc",
-            "image": f"#post-{id} > section:nth-child(1) > div > div > div.single-cover-header > div.single-cover-header__thumbnail > img",
-            "chord": f"#post-{id} > section:nth-child(2) > div.archive-desc > p",
-            "text": f"#post-{id} > section:nth-child(5) > div > div"
-        }
-
-        # Elements retrieval with individual try-except blocks
-        elements = {}
-        for key, selector in selectors.items():
-            try:
-                elements[key] = await page.waitForSelector(selector, {'timeout': 60000})
-            except Exception as e:
-                print(f"Error waiting for selector {selector}: {e}")
-                elements[key] = None
-
-        # Extract data if elements are found
-        data_dict = {}
-        if elements["name"]:
-            data_dict["title"] = await page.evaluate('(element) => element.textContent', elements["name"])
-        if elements["key"]:
-            data_dict["key"] = await page.evaluate('(element) => element.textContent', elements["key"])
-        if elements["capo"]:
-            data_dict["capo"] = await page.evaluate('(element) => element.textContent', elements["capo"])
-        if elements["image"]:
-            data_dict["image"] = await page.evaluate('(element) => element.getAttribute("src")', elements["image"])
-        if elements["chord"]:
-            data_dict["chord"] = await page.evaluate('(element) => element.textContent', elements["chord"])
-        if elements["text"]:
-            data_dict["text"] = await page.evaluate('(element) => element.textContent', elements["text"])
-
-        if "chord" in data_dict:
-            chords = [i.replace('คอร์ด ', '') for i in data_dict["chord"].split(', ')]
+        
+        if action == '' and count == 0:
+            content = await simulator(url, id)
+            return content
+        elif action == 'addkey' and count >= 1:
+            content = await simulator(url, id, action, count)
+            return content
+        
+        elif action == 'reducekey' and count >= 1:
+            return {"message": f"Reduced {count} keys from {id}"}
+        
         else:
-            chords = []
+            return {"message": f"Chord ID {id} not found or invalid action/count combination"}
 
-        if "text" in data_dict:
-            temp = data_dict["text"].strip().split("\n\n")
-            lyrics = []
-
-            for section in temp:
-                if section.startswith("INTRO") or section.startswith("INSTRU"):
-                    lyrics.append({"text": section, "chord": None})
-                else:
-                    lines = section.split("\n")
-                    for line in lines:
-                        found_chord = None
-                        words = line.split()
-                        for word in words:
-                            if word.strip(".,!?:;'\"()[]{}").strip() in chords:
-                                found_chord = word.strip(".,!?:;'\"()[]{}").strip()
-                                break  # Break after finding the first chord
-                        lyrics.append({"text": line, "chord": found_chord})
-
-            print(lyrics) 
-            lines = lyrics
-
-        else:
-            lines = []
-
-
-        data.append({
-            "title": data_dict.get("title", ""),
-            "key": data_dict.get("key", ""),
-            "capo": data_dict.get("capo", ""),
-            "image": data_dict.get("image", ""),
-            "chord": chords,
-            "text": data_dict.get("text", ""),
-        })
-
-        await browser.close()
         return data
     
     except Exception as e:
         print(f"An error occurred: {e}")
-        if 'browser' in locals():
+        if 'browser' in locals() and browser is not None:
             await browser.close()
         return []
-    
-def parse_song_data(song_text):
-    # Initialize variables to hold sections
-    intro = ""
-    instru = []
-    textchord = []
 
-    # Patterns to identify chords and lines
-    intro_pattern = r'INTRO : (.*)'
-    instru_pattern = r'INSTRU : (.*)'
-    chord_pattern = r'([A-G][#b]?m?|null)'
+# Example usage:
+# asyncio.get_event_loop().run_until_complete(simulator('your_url_here', your_id_here))

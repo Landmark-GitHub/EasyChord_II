@@ -34,13 +34,31 @@ const noteStrings = [
 ];
 
 var lineGuitar = {
-  "D": false,
-  "A": true,
-  "E": false,
-  "G": false,
-  "B": false,
-  "E": false,
-}
+  '1 E': {
+    title: "1 E",
+    q: "82.40",
+  },
+  '2 A': {
+    title: "2 A",
+    q: "110.00",
+  },
+  '3 D': {
+    title: "3 D",
+    q: "146.83",
+  },
+  '4 G': {
+    title: "4 G",
+    q: "196.00",
+  },
+  '5 B': {
+    title: "5 B",
+    q: "246.94",
+  },
+  '6 E': {
+    title: "6 E",
+    q: "329.63",
+  },
+};
 
 export default function Turner() {
   const [source, setSource] = useState<MediaStreamAudioSourceNode | null>(null);
@@ -106,7 +124,7 @@ export default function Turner() {
 
   return (
     <motion.div 
-      className="gap-4 mt-8"
+      className="gap-2 mt-8"
       initial={{ opacity: 0,}}
       animate={{ opacity: 2,}}
       transition={{ duration: 0.5 }}
@@ -118,20 +136,20 @@ export default function Turner() {
       <div className="mt-8">
         <Tabs color="primary" radius="full" selectedKey={pitchNote}> 
           {Object.keys(lineGuitar).map((note, index) => (
-            <Tab key={index} title={note}/>
+            <Tab key={index} title={`${lineGuitar[note].title} : ${lineGuitar[note].q}`}></Tab>
           ))}
         </Tabs>
       </div>
       {!started ? (
           <button
-            className="bg-red-600 text-white w-20 h-20 rounded-full shadow-xl transition-all mt-8"
+            className="bg-red-600 text-white w-20 h-20 rounded-full shadow-xl transition-all mt-16"
             onClick={start}
           >
             Start
           </button>
         ) : (
           <button
-            className="bg-red-800 text-white w-20 h-20 rounded-full shadow-xl transition-all mt-8"
+            className="bg-red-800 text-white w-20 h-20 rounded-full shadow-xl transition-all mt-16"
             onClick={stop}
           >
             Stop

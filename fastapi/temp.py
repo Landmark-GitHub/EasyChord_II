@@ -8,6 +8,8 @@ from urllib.request import urlopen
 from chordsMusic import simulator
 
 app = FastAPI()
+browser = await launch(headless=True, executablePath='C:/Program Files/Google/Chrome/Application/chrome.exe')
+page = await browser.newPage()
 
 # Allow all origins to access your API (replace * with specific origins if needed)
 app.add_middleware(
@@ -116,11 +118,19 @@ async def search(searchMusic_id: str):
         print('Puppeteer error:', e)
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.get("/chordsMusic/{chords_id}")
-async def chords_music(chords_id: str):
-    url = f"https://www.dochord.com/{chords_id}/"
-    content = await simulator(url, chords_id)
-    return content
+@app.get("/chordsMusic/{id}/{action}/{count}")
+async def chords_music(id: str, action: str, count: int ):
+    url = f"https://www.dochord.com/{id}/"
+    try:
+        await page.goto(url, {'waitUntil': 'networkidle2', 'timeout': 0})
+        content = await simulator(url, id, action, count, page,)
+        await browser.close()
+        return content
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    if 'browser' in locals() and browser is not None:
+        await browser.close()
+    return []
 
 if __name__ == "__main__":
     import uvicorn
