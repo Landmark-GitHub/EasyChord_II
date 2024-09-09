@@ -16,13 +16,14 @@ const Footer = () => {
     const counterKeyRef = useRef(0);
 
     type KeyAction = 'addkey' | 'reducekey';
+
     async function change_key(action:KeyAction) {
         try {
             setDataMusic(prevData => prevData ? [{...prevData[0], title: null}, ...prevData.slice(1)] : []);
             const newKey = action === 'addkey' ? counterKeyRef.current + 1 : counterKeyRef.current - 1;
-            const counter = Math.abs(newKey);
-            console.log(`http://127.0.0.1:8000/chordsMusic/${id}/${action}/${counter}`)
-            const response = await fetch(`http://127.0.0.1:8000/chordsMusic/${id}/${action}/${counter}`);
+            const counter = newKey
+            // console.log(`http://127.0.0.1:8000/chordsMusic/${id}/${counter}`)
+            const response = await fetch(`http://127.0.0.1:8000/chordsMusic/${id}/${counter}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch data');
             }
@@ -149,52 +150,7 @@ const Footer = () => {
         </motion.div>
     );
 };
-};
+// };
 
 export default Footer;
 
-// const incrementCounter = async () => {
-//     counterKeyRef.current += 1;
-//     let action = "addkey";
-//         if  (counterKeyRef.current < 1) {
-//             try {
-//                 const response = await fetch(`http://127.0.0.1:8000/chordsMusic/${id}/${action}/${counterKeyRef.current}`);
-//                 if (!response.ok) {
-//                 throw new Error('Failed to fetch data');
-//                 }
-                
-//                 const data: MusicData[] = await response.json();
-//                 setDataMusic(data);
-//             } catch (error) {
-//                 console.error('Error fetching data:', error);
-//             }
-//     };
-// }
-
-// const decrementCounter = async () => {
-//     counterKeyRef.current -= 1;
-//     let action = "reducekey";
-//     if (counterKeyRef.current < 1) {
-//         let count = counterKeyRef.current * -1;
-//         const response = await fetch(`http://127.0.0.1:8000/chordsMusic/${id}/${action}/${count}`);
-//         if (!response.ok) {
-//         throw new Error('Failed to fetch data');
-//         }
-        
-//         const data: MusicData[] = await response.json();
-//         setDataMusic(data);
-//     }else{
-        
-//     }
-//     // try {
-//     //     const response = await fetch(`http://127.0.0.1:8000/chordsMusic/${id}/${action}/${count}`);
-//     //     if (!response.ok) {
-//     //     throw new Error('Failed to fetch data');
-//     //     }
-        
-//     //     const data: MusicData[] = await response.json();
-//     //     setDataMusic(data);
-//     // } catch (error) {
-//     //     console.error('Error fetching data:', error);
-//     // }
-// };

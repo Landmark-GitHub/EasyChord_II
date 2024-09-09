@@ -115,5 +115,4 @@ async def simulator(url, id, action, count):
             await browser.close()
         return []
 
-# Example usage:
-# asyncio.get_event_loop().run_until_complete(simulator('your_url_here', your_id_here))
+

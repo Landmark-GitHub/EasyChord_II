@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  fastapi:
+    build:
+      context: ./fastapi
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./fastapi:/app
+    networks:
+      - app-network
+
+  nextui:
+    build:
+      context: ./nextui-app
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+
+# run nextui not run fastapi
+# version: '3.8'
+
+# services:
+#   fastapi:
+#     build:
+#       context: ./fastapi
+#     ports:
+#       - "8000:8000"
+#     volumes:
+#       - ./app/:/app
+#     networks:
+#       - app-network 
+
+#   nextui:
+#     build:
+#       context: ./nextui
+#     ports:
+#       - "3000:3000"
+#     networks:
+#       - app-network
+
+# networks:
+#   app-network:
+#     driver: bridge
