@@ -1,4 +1,4 @@
-export const chord = {
+export const tableChords = {
     'C': [
         'https://www.folkpeople.com/gt_chord/chord-image/C-Chord.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/C-Chord-2.jpg?v=01',
