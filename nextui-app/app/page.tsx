@@ -43,7 +43,7 @@ const CardItem: React.FC<CardItemProps> = ({ code, image, title }) => {
         <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
           <p className="text-tiny text-white/80">{title}</p>
           <div className="text-tiny text-white bg-black/20 px-3 py-1 rounded-lg">
-            Key Original C
+            Key Original C hi
           </div>
         </CardFooter>
       </Card>
@@ -78,7 +78,6 @@ const CardArea: React.FC<CardAreaProps> = ({ songData }) => {
         transition={{
           duration: 0.5,
           ease: "linear",
-          duration: 2,
           x: { duration: 1 },
         }}
       >
@@ -97,6 +96,8 @@ const CardArea: React.FC<CardAreaProps> = ({ songData }) => {
         page={currentPage}
         onChange={(page) => handleChangePage(page)}
       />
+      <span className="text-default-600">Original Websit by</span>
+      <p className="text-primary">Dochrod.com</p>
     </motion.div>
   );
 };
@@ -150,101 +151,3 @@ export default function Home() {
     </div>
   );
 }
-
-// import { Link } from "@nextui-org/link";  // ลบออกเพราะไม่ได้ใช้งาน
-// import { Snippet } from "@nextui-org/snippet";  // ลบออกเพราะไม่ได้ใช้งาน
-// import { Code } from "@nextui-org/code";  // ลบออกเพราะไม่ได้ใช้งาน
-// import { button as buttonStyles } from "@nextui-org/theme";  // ลบออกเพราะไม่ได้ใช้งาน
-
-// import { siteConfig } from "@/config/site";  // ลบออกเพราะไม่ได้ใช้งาน
-// "use client"
-// import { Link } from "@nextui-org/link";
-// import { Snippet } from "@nextui-org/snippet";
-// import { Code } from "@nextui-org/code";
-// import { button as buttonStyles } from "@nextui-org/theme";
-
-// import { siteConfig } from "@/config/site";
-// import { title, subtitle } from "@/components/primitives";
-// import { GithubIcon } from "@/components/icons";
-
-// import { useSearchParams } from 'next/navigation';
-// import {Card, CardFooter, Image, Button} from "@nextui-org/react";
-
-// const CardItem = () => {
-//   return(
-//     <Card
-//     isFooterBlurred
-//     radius="lg"
-//     className="border-none"
-//   >
-//     <Image
-//       alt="Woman listing to music"
-//       className="object-cover"
-//       height={200}
-//       src="https://nextui.org/images/hero-card.jpeg"
-//       width={200}
-//     />
-//     <CardFooter className="justify-between before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">
-//       <p className="text-tiny text-white/80">Name Music</p>
-//       <Button className="text-tiny text-white bg-black/20" variant="flat" color="default" radius="lg" size="sm">
-//         Key Original C
-//       </Button>
-//     </CardFooter>
-//   </Card>
-//   )
-// }
-
-// export default function Home() {
-//   const searchParams = useSearchParams();
-//   const keyword = searchParams.get('keyword');
-//   return (
-//     <section className="flex flex-col items-center justify-center gap-4 py-8 md:py-10">
-//       <h1 className={title()}>Home</h1>
-//       {keyword && <p>Search Keyword: {keyword}</p>}
-//       <CardItem/>
-//     </section>
-//   );
-// }
-
-
-      {/* <div className="inline-block max-w-lg text-center justify-center">
-        <h1 className={title()}>Make&nbsp;</h1>
-        <h1 className={title({ color: "violet" })}>beautiful&nbsp;</h1>
-        <br />
-        <h1 className={title()}>
-          websites regardless of your design experience.
-        </h1>
-        <h2 className={subtitle({ class: "mt-4" })}>
-          Beautiful, fast and modern React UI library.
-        </h2>
-      </div> */}
-
-      {/* <div className="flex gap-3">
-        <Link
-          isExternal
-          className={buttonStyles({
-            color: "primary",
-            radius: "full",
-            variant: "shadow",
-          })}
-          href={siteConfig.links.docs}
-        >
-          Documentation
-        </Link>
-        <Link
-          isExternal
-          className={buttonStyles({ variant: "bordered", radius: "full" })}
-          href={siteConfig.links.github}
-        >
-          <GithubIcon size={20} />
-          GitHub
-        </Link>
-      </div>
-
-      <div className="mt-8">
-        <Snippet hideCopyButton hideSymbol variant="flat">
-          <span>
-            Get started by editing <Code color="primary">app/page.tsx</Code>
-          </span>
-        </Snippet>
-      </div> */}

@@ -1,0 +1,22 @@
+.text {
+    text-align: center;
+    padding: 10px;
+    padding-right: 5px;
+    -moz-text-align-last: center;
+    -ms-text-align-last: center;
+    text-align-last: center;
+    font-family: Arial;
+    font-size: 13pt;
+}
+
+.chord {
+    position: relative;
+    font-weight: 700;
+    display: inline-block;
+    left: 0;
+    width: 25px;
+    top: -20px;
+    margin-left: -25px;
+    text-align: right;
+    word-wrap: normal;
+}
