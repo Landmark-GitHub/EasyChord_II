@@ -1,4 +1,5 @@
-export const tableChords = {
+export type TableChords = Record<string, string[]>;
+export const tableChords: Record<string, string[]> = {
     'C': [
         'https://www.folkpeople.com/gt_chord/chord-image/C-Chord.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/C-Chord-2.jpg?v=01',

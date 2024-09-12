@@ -134,7 +134,6 @@ export default function Home() {
   useEffect(() => {
 
     if (!keyword) {
-      console.log("loading list music...")
       getListMusic();
     } else {
       searchMusic(keyword);
