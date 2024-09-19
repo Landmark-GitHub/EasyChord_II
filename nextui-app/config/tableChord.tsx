@@ -91,4 +91,18 @@ export const tableChords: Record<string, string[]> = {
         'https://www.folkpeople.com/gt_chord/chord-image/B-Chord-4.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/B-Chord-5.jpg?v=01',
     ],
+    'Bm': [
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord-2.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord-3.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord-4.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord-5.jpg?v=01',
+    ],
+    'A/C#': [
+        'https://www.folkpeople.com/gt_chord/chord-image/A/C#-Chord.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/A/C#-Chord-2.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/A/C#-Chord-3.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/A/C#-Chord-4.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/A/C#-Chord-5.jpg?v=01',
+    ],
 };

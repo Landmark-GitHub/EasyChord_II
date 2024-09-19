@@ -28,7 +28,6 @@ export default function BlogPage() {
         }
         
         const data: MusicData[] = await response.json();
-        console.table(data)
         setDataMusic(data);
         setLoading(false);
         } catch (error) {
