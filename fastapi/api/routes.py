@@ -6,7 +6,7 @@ router = APIRouter()
 
 @router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Welcome to API Web"}
 
 @router.get("/listMusic")
 async def get_list_music():
