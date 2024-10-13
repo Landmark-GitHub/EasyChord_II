@@ -126,9 +126,15 @@ async def load_lyrics(page, id):
             for element in title_elements:
                 title = await element.getProperty('textContent')
                 title_text = await title.jsonValue()
-                # data = title_text
-                clean_text = replace_chords_with_underscore(title_text, chords)
-                data[0]["text"].append(clean_text)  # Pass the list
+                if 'INTRO' in title_text or 'INSTRU' in title_text:
+                    clean_text = {
+                        'text': title_text,
+                        'chords': []
+                    }
+                    data[0]["text"].append(clean_text)
+                else:
+                    clean_text = replace_chords_with_underscore(title_text, chords)
+                    data[0]["text"].append(clean_text)  # Pass the list
         else:
             print("ไม่พบแท็กที่ต้องการ")
 
