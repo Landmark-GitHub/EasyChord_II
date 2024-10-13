@@ -11,7 +11,7 @@ interface MusicData {
     text: { text: string; chords: string; rest_text: string }[];
 }
 
-export default function BlogPage() {
+export default function Chord() {
     const keyword = useSearchParams().get("code");
     const { dataMusic, setDataMusic } = useMusic();
     const [loading, setLoading] = useState<boolean>(true);
@@ -43,17 +43,51 @@ export default function BlogPage() {
     return <h1 className={title()}>LOADING...</h1>;
     }
 
+    const formatTextWithChords = (text: string, chords: string[] = []) => {
+        let i = 0;
+        let text1 = text.replace(/_/g, () => chords[i++]);
+        function replaceNonChord(text: string, chordArray: string[]) {
+            let result = '';
+            let j = 0;
+            while (j < text.length) {
+                let matched = false;
+                for (let k = 0; k < chordArray.length; k++) {
+                    if (text.substr(j, chordArray[k].length) === chordArray[k]) {
+                        result += chordArray[k];
+                        j += chordArray[k].length; // ข้ามจำนวนตำแหน่งเท่ากับคอร์ด
+                        matched = true;
+                        break;
+                    }
+                }
+                // ถ้าไม่เจอคอร์ดที่ตรงกัน เปลี่ยนเป็นช่องว่าง
+                if (!matched) {
+                    result += '\u00A0';
+                    j++;
+                }
+            }
+            return result;
+        }
+        let text2 = replaceNonChord(text1, chords);
+        let text3 = chords.reduce((acc, chord) => acc.replace(new RegExp(chord, 'g'), ''), text1);
+        return (
+            <div className="grid grid-rows-2">
+                <span className={styles.text}>{text2}</span>
+                <p>{text3}</p>
+            </div>
+        );
+    };
+
     return (
     <div className="w-screen absolute top-20 left-0 p-8 md:px-40">
         {dataMusic ? (
         <ScrollShadow size={100} className="w-full md:h-[500px] h-[600px] mb-34">
             <h1 className={title()}>{dataMusic[0].title}</h1>
             <ul>
-            {dataMusic[0].text.map((item, index) => (
-                <li className={`${styles.text}`} key={index}>
-                {item.text}<span className={`${styles.chord}`}>{item.chords}</span>{item.rest_text}
-                </li>
-            ))}
+                {dataMusic[0].text.map((item, index) => (
+                    <li key={index}>
+                        {formatTextWithChords(item.text, item.chords)}
+                    </li>
+                ))}
             </ul>
         </ScrollShadow>
         ) : (

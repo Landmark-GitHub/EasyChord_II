@@ -2,7 +2,7 @@ from fastapi import HTTPException
 import requests
 from bs4 import BeautifulSoup
 from app.services.web_scraping import get_page
-from app.utils.helpers import separate_lyrics_and_chords
+from app.utils.helpers import separate_lyrics_and_chords, replace_chords_with_underscore
 
 async def list_music():
     url = "https://www.dochord.com"
@@ -53,35 +53,32 @@ async def chords_music(id: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-async def chords_music_plus(id: str, action: str, count: int):
+async def chords_music_plus(id: str, count: int):
     url = f"https://www.dochord.com/{id}/"
     page = get_page()
     await page.goto(url, {'waitUntil': 'networkidle2', 'timeout': 0})
 
     try:
-        if action == 'addkey' and count >= 1:
+        if count > 0:
             for _ in range(count):
-                selector = "#post-{0} > section:nth-child(4) > div.single-key > div.single-key__select > a.single-key__select-plus".format(id)
+                selector = f"#post-{id} > section:nth-child(4) > div.single-key > div.single-key__select > a.single-key__select-plus"
                 await page.click(selector)
-            data = await load_lyrics(page, id)
-            return data
-        elif action == 'reducekey' and count >= 1:
+        elif count < 0:
+            count = abs(count)
             for _ in range(count):
-                selector = "#post-{0} > section:nth-child(4) > div.single-key > div.single-key__select > a.single-key__select-minus".format(id)
+                selector = f"#post-{id} > section:nth-child(4) > div.single-key > div.single-key__select > a.single-key__select-minus"
                 await page.click(selector)
-            data = await load_lyrics(page, id)
-            return data
-            
-        else:
-            return {"message": f"Invalid action/count combination for Chord ID {id}"}
+        elif count == 0:
+            pass
+
+        data = await load_lyrics(page, id)
+        return data
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-
+    
 async def load_lyrics(page, id):
     try:
         data = []
-        # Content Selectors
         selectors = {
             "name": f"#post-{id} > section:nth-child(1) > div > div > div.single-cover-header > div.single-cover-header-info > div > h1",
             "key": f"#post-{id} > section:nth-child(4) > div.single-key > div.single-key__select > div",
@@ -90,6 +87,8 @@ async def load_lyrics(page, id):
             "chord": f"#post-{id} > section:nth-child(2) > div.archive-desc > p",
             "text": f"#post-{id} > section:nth-child(5) > div > div"
         }
+        
+        title_elements = await page.querySelectorAll('p.cv-th')
 
         # Elements retrieval with individual try-except blocks
         elements = {}
@@ -113,20 +112,25 @@ async def load_lyrics(page, id):
             chords = [i.replace('คอร์ด ', '') for i in data_dict["chord"].split(', ')]
         else:
             chords = []
-
-        if "text" in data_dict:
-            lyrics = separate_lyrics_and_chords(data_dict["text"], chords)
-        else:
-            lyrics = []
-
+            
         data.append({
             "title": data_dict.get("name", ""),
             "key": data_dict.get("key", ""),
             "capo": data_dict.get("capo", ""),
             "image": data_dict.get("image", ""),
             "chord": chords,
-            "text": lyrics,
+            "text": []
         })
+
+        if title_elements and chords:  # Check if chords_list is not empty
+            for element in title_elements:
+                title = await element.getProperty('textContent')
+                title_text = await title.jsonValue()
+                # data = title_text
+                clean_text = replace_chords_with_underscore(title_text, chords)
+                data[0]["text"].append(clean_text)  # Pass the list
+        else:
+            print("ไม่พบแท็กที่ต้องการ")
 
         return data
     except Exception as e:

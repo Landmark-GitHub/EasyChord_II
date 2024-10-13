@@ -20,3 +20,11 @@
     text-align: right;
     word-wrap: normal;
 }
+
+.text {
+    margin: 0; /* Remove any default margin */
+}
+
+.chord {
+    margin-left: 0; /* Prevent any left margin for chords */
+}

@@ -33,4 +33,31 @@ COPY . /app
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Set ENTRYPOINT and CMD for running the application
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+# fastapi/Dockerfile
+# FROM python:3.9
+
+# # Install dependencies
+# RUN apt-get update && apt-get install -y \
+#     wget \
+#     --no-install-recommends \
+#     chromium \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+
+# # Set environment variables for Pyppeteer
+# ENV PUPPETEER_HOME=/usr/local/share/puppeteer
+# ENV PUPPETEER_SKIP_DOWNLOAD=true
+
+# WORKDIR /app
+
+# COPY requirements.txt .
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# COPY . .
+
+# CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+
+

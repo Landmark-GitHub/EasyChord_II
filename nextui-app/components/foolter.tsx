@@ -92,6 +92,7 @@ const Footer = (props:any) => {
     type KeyAction = 'addkey' | 'reducekey';
 
     useEffect(() => {
+
         if (dataMusic && dataMusic[0] && Array.isArray(dataMusic[0].chord)) {
             const newChordImages = dataMusic[0].chord.reduce((acc: string[], item: string) => {
                 if (tableChords[item]) {
@@ -100,16 +101,16 @@ const Footer = (props:any) => {
                 return acc;
             }, []);
             setChordImages(newChordImages);
+            // console.log(chordImages);
+            // console.log(dataMusic[0].chord)
         }
     }, [dataMusic, tableChords]);
     
-
     async function change_key(action:KeyAction) {
         try {
             setDataMusic(prevData => prevData ? [{...prevData[0], title: null}, ...prevData.slice(1)] : []);
             const newKey = action === 'addkey' ? counterKeyRef.current + 1 : counterKeyRef.current - 1;
             const counter = newKey
-            // console.log(`http://127.0.0.1:8000/chordsMusic/${id}/${counter}`)
             const response = await fetch(`http://127.0.0.1:8000/chordsMusic/${id}/${counter}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch data');
@@ -191,39 +192,39 @@ const Footer = (props:any) => {
 
                     {isSelected && dataMusic ?
                         <div className="">
-                        <ScrollShadow orientation="horizontal" className="max-w-full overflow-x-auto">
-                            <div className="flex space-x-4 w-max">
-                                {chordImages.map((src, index) => (
-                                    <Card shadow="sm" key={index} isPressable onClick={() => change_chord(dataMusic[0].chord[index],index)}>
-                                        <CardBody className="overflow-visible p-0">
-                                            <Image
-                                                shadow="sm"
-                                                radius="lg"
-                                                width="95%"
-                                                alt={`Chord image for ${dataMusic[0].chord[index]}`}
-                                                className="w-full object-cover h-[100px]"
-                                                src={src}
-                                            />
-                                        </CardBody>
-                                        <CardFooter className="text-small">
-                                            <b>{dataMusic[0].chord[index]}</b>
-                                        </CardFooter>
-                                    </Card>
-                                ))}
-                            </div>
-                        </ScrollShadow>
+                            <ScrollShadow orientation="horizontal" className="max-w-full overflow-x-auto">
+                                <div className="flex space-x-4 w-max">
+                                    {chordImages.map((src, index) => (
+                                        <Card shadow="sm" key={index} isPressable onClick={() => change_chord(dataMusic[0].chord[index],index)}>
+                                            <CardBody className="overflow-visible p-0">
+                                                <Image
+                                                    shadow="sm"
+                                                    radius="lg"
+                                                    width="95%"
+                                                    alt={`Chord image for ${dataMusic[0].chord[index]}`}
+                                                    className="w-full object-cover h-[100px]"
+                                                    src={src}
+                                                />
+                                            </CardBody>
+                                            <CardFooter className="text-small">
+                                                <b>{dataMusic[0].chord[index]}</b>
+                                            </CardFooter>
+                                        </Card>
+                                    ))}
+                                </div>
+                            </ScrollShadow>
                         </div>
                     :
                         <div className="grid grid-cols-6 md:grid-cols-12 gap-4 items-center justify-center">     
                             <div className="relative col-span-6 md:col-auto">
-                            <Image
-                                alt="Album cover"
-                                className="hidden md:block object-cover"
-                                height={200}
-                                shadow="md"
-                                src= "https://www.dochord.com/wp-content/uploads/2017/10/MAIYARAP-150x150.jpg"
-                                width={190}
-                            />
+                                <Image
+                                    alt="Album cover"
+                                    className="w-full object-cover h-[100px]"
+                                    shadow="md"
+                                    src={dataMusic && dataMusic[0] ? dataMusic[0].image : '/path/to/placeholder/image.jpg'} // Provide a fallback image
+                                    width="100%"
+                                    height={144}
+                                />
                             </div>
 
                             <div className="flex flex-col col-span-6 md:col-span-11">
@@ -307,4 +308,3 @@ const Footer = (props:any) => {
 
 
 export default Footer;
-
