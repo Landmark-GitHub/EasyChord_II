@@ -35,12 +35,26 @@ export const tableChords: Record<string, string[]> = {
         'https://www.folkpeople.com/gt_chord/chord-image/E-Chord-4.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/E-Chord-5.jpg?v=01',
     ],
+    'Dm':[ 
+        'https://www.folkpeople.com/gt_chord/chord-image/Dm-Chord.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Dm-Chord-2.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Dm-Chord-3.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Dm-Chord-4.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Dm-Chord-5.jpg?v=01'
+    ],
     'Emaj7':[
         'https://www.folkpeople.com/gt_chord/chord-image/Emaj7-Chord.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/Emaj7-Chord-2.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/Emaj7-Chord-3.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/Emaj7-Chord-4.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/Emaj7-Chord-5.jpg?v=01',
+    ],
+    'Em': [
+        'https://www.folkpeople.com/gt_chord/chord-image/Em-Chord.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Em-Chord-2.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Em-Chord-3.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Em-Chord-4.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Em-Chord-5.jpg?v=01',
     ],
     'F': [
         'https://www.folkpeople.com/gt_chord/chord-image/F-Chord.jpg?v=01',
@@ -55,6 +69,13 @@ export const tableChords: Record<string, string[]> = {
         'https://www.folkpeople.com/gt_chord/chord-image/Fmaj7-Chord-3.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/Fmaj7-Chord-4.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/Fmaj7-Chord-5.jpg?v=01',
+    ],
+    'F#m': [
+        'https://www.folkpeople.com/gt_chord/chord-image/Fxm-Chord.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Fxm-Chord-2.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Fxm-Chord-3.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Fxm-Chord-4.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Fxm-Chord-5.jpg?v=01',
     ],
     'A':[
         'http://www.folkpeople.com/gt_chord/chord-image/A-Chord.jpg?v=01',
@@ -90,5 +111,15 @@ export const tableChords: Record<string, string[]> = {
         'https://www.folkpeople.com/gt_chord/chord-image/B-Chord-3.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/B-Chord-4.jpg?v=01',
         'https://www.folkpeople.com/gt_chord/chord-image/B-Chord-5.jpg?v=01',
+    ],
+    'Bm': [
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord-2.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord-3.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord-4.jpg?v=01',
+        'https://www.folkpeople.com/gt_chord/chord-image/Bm-Chord-5.jpg?v=01',
+    ],
+    'A/C#': [
+        'https://onlineguitarbooks.com/wp-content/uploads/2023/01/A-Over-C-Sharp-Chord.png',
     ],
 };

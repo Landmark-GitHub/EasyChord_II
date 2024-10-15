@@ -6,7 +6,7 @@ router = APIRouter()
 
 @router.get("/")
 async def root():
-    return {"message": "Hello World"}
+    return {"message": "Welcome to API Web"}
 
 @router.get("/listMusic")
 async def get_list_music():
@@ -20,6 +20,6 @@ async def search(searchMusic_id: str):
 async def get_simple_chords_music(id: str):
     return await chords_music(id)
 
-@router.get("/chordsMusic/{id}/{action}/{count}")
-async def get_detailed_chords_music(id: str, action: str, count: int):
-    return await chords_music_plus(id, action, count)
+@router.get("/chordsMusic/{id}/{count}")
+async def get_detailed_chords_music(id: str, count: int):
+    return await chords_music_plus(id, count)

@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.routes import router
 from app.services.web_scraping import initialize_browser, close_browser
+import uvicorn
 
 app = FastAPI()
 
@@ -24,5 +25,5 @@ async def shutdown_event():
     await close_browser()
 
 if __name__ == "__main__":
-    import uvicorn
+    print("Application is starting...")
     uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)

@@ -88,41 +88,29 @@ const Footer = (props:any) => {
     const [chordImages, setChordImages] = useState<string[]>([]);
     const [nameChord, setNameChord] = useState('');
     const [positionChord, setPositionChord] = useState<number | undefined>(undefined);
-    const hasRun = useRef(false);
 
     type KeyAction = 'addkey' | 'reducekey';
 
-    //dataMusic[0].chord
-    //at same dataMusic[0].chord == dataChord
-    const dataChord = [
-        {
-            chord: ['B', 'Amaj7', 'C','C','C', 'Fmaj7', 'D', 'Dmaj7', 'E', 'Emaj7', 'F', 'G', 'Cmaj7', 'G', 'B']
-        }
-    ];
-
     useEffect(() => {
-        if (!hasRun.current && dataChord[0]?.chord) {
-            hasRun.current = true; // Set the ref to true so the effect won't run again
-    
-            const newChordImages = dataChord[0].chord.reduce<string[]>((images, chord) => {
-                if (tableChords[chord]) {
-                    images.push(tableChords[chord][0]);
-                }
-                return images;
-            }, []);
-    
-            console.log(newChordImages);
-    
-            setChordImages(newChordImages);
-        }
-    }, [dataChord, tableChords]);
 
+        if (dataMusic && dataMusic[0] && Array.isArray(dataMusic[0].chord)) {
+            const newChordImages = dataMusic[0].chord.reduce((acc: string[], item: string) => {
+                if (tableChords[item]) {
+                    acc.push(tableChords[item][0]); // ดึงภาพแรกจาก tableChords
+                }
+                return acc;
+            }, []);
+            setChordImages(newChordImages);
+            // console.log(chordImages);
+            // console.log(dataMusic[0].chord)
+        }
+    }, [dataMusic, tableChords]);
+    
     async function change_key(action:KeyAction) {
         try {
             setDataMusic(prevData => prevData ? [{...prevData[0], title: null}, ...prevData.slice(1)] : []);
             const newKey = action === 'addkey' ? counterKeyRef.current + 1 : counterKeyRef.current - 1;
             const counter = newKey
-            // console.log(`http://127.0.0.1:8000/chordsMusic/${id}/${counter}`)
             const response = await fetch(`http://127.0.0.1:8000/chordsMusic/${id}/${counter}`);
             if (!response.ok) {
                 throw new Error('Failed to fetch data');
@@ -140,6 +128,9 @@ const Footer = (props:any) => {
         setNameChord(name)
         setPositionChord(position)
         optionChord.onOpenChange(true);
+        console.log(dataMusic[0].chord);
+        console.log(chordImages.length);
+        
     }
 
     const {
@@ -167,7 +158,7 @@ const Footer = (props:any) => {
             >
                 <CardBody>
                     
-                    {dataChord ? 
+                    {dataMusic ? 
                         <div className=" absolute right-2 top-2 flex justify-between items-start z-20">
                             <div className="grid grid-flow-col gap-2">
                                 <Component {...getBaseProps()}>
@@ -199,41 +190,41 @@ const Footer = (props:any) => {
                         <></>
                     }      
 
-                    {isSelected && dataChord ?
+                    {isSelected && dataMusic ?
                         <div className="">
-                        <ScrollShadow orientation="horizontal" className="max-w-full overflow-x-auto">
-                            <div className="flex space-x-4 w-max">
-                                {chordImages.map((src, index) => (
-                                    <Card shadow="sm" key={index} isPressable onClick={() => change_chord(dataChord[0].chord[index],index)}>
-                                        <CardBody className="overflow-visible p-0">
-                                            <Image
-                                                shadow="sm"
-                                                radius="lg"
-                                                width="100%"
-                                                alt={`Chord image for ${dataChord[0].chord[index]}`}
-                                                className="w-full object-cover h-[140px]"
-                                                src={src}
-                                            />
-                                        </CardBody>
-                                        <CardFooter className="text-small">
-                                            <b>{dataChord[0].chord[index]}</b>
-                                        </CardFooter>
-                                    </Card>
-                                ))}
-                            </div>
-                        </ScrollShadow>
-                    </div>
+                            <ScrollShadow orientation="horizontal" className="max-w-full overflow-x-auto">
+                                <div className="flex space-x-4 w-max">
+                                    {chordImages.map((src, index) => (
+                                        <Card shadow="sm" key={index} isPressable onClick={() => change_chord(dataMusic[0].chord[index],index)}>
+                                            <CardBody className="overflow-visible p-0">
+                                                <Image
+                                                    shadow="sm"
+                                                    radius="lg"
+                                                    width="95%"
+                                                    alt={`Chord image for ${dataMusic[0].chord[index]}`}
+                                                    className="w-full object-cover h-[100px]"
+                                                    src={src}
+                                                />
+                                            </CardBody>
+                                            <CardFooter className="text-small">
+                                                <b>{dataMusic[0].chord[index]}</b>
+                                            </CardFooter>
+                                        </Card>
+                                    ))}
+                                </div>
+                            </ScrollShadow>
+                        </div>
                     :
                         <div className="grid grid-cols-6 md:grid-cols-12 gap-4 items-center justify-center">     
                             <div className="relative col-span-6 md:col-auto">
-                            <Image
-                                alt="Album cover"
-                                className="hidden md:block object-cover"
-                                height={200}
-                                shadow="md"
-                                src= "https://www.dochord.com/wp-content/uploads/2017/10/MAIYARAP-150x150.jpg"
-                                width={190}
-                            />
+                                <Image
+                                    alt="Album cover"
+                                    className="w-full object-cover h-[100px]"
+                                    shadow="md"
+                                    src={dataMusic && dataMusic[0] ? dataMusic[0].image : '/path/to/placeholder/image.jpg'} // Provide a fallback image
+                                    width="100%"
+                                    height={144}
+                                />
                             </div>
 
                             <div className="flex flex-col col-span-6 md:col-span-11">
@@ -260,8 +251,6 @@ const Footer = (props:any) => {
                                     <p className="text-small text-foreground/50">4:32</p>
                                     </div>
                                 </div>
-
-                                {/* <div className="flex w-full items-center justify-between"> */}
                                 {dataMusic ? 
                                 <div className="flex w-full items-center justify-between">
                                     <div className="grid grid-flow-col gap-2"> 
@@ -286,12 +275,6 @@ const Footer = (props:any) => {
                                             </Button> 
                                         </div>
                                     </div>
-                                    {/* <div>
-                                        <ButtonGroup>
-                                            <Button>Console</Button>
-                                            <Button>Dochord</Button>
-                                        </ButtonGroup>
-                                    </div> */}
                                     <div className="grid grid-flow-col gap-2">
                                         <Button isIconOnly size="sm" aria-label="Take a photo">
                                             <FaPlay/>
@@ -325,4 +308,3 @@ const Footer = (props:any) => {
 
 
 export default Footer;
-

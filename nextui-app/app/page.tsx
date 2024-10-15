@@ -11,12 +11,14 @@ interface Song {
   title: string;
   image: string;
   code: string;
+  url:string;
 }
 
 interface CardItemProps {
   code: string;
   image: string;
   title: string;
+  url:string;
 }
 
 interface CardAreaProps {
@@ -121,6 +123,7 @@ export default function Home() {
 
   async function searchMusic(keyword: string){
     // Fetch data from the FastAPI endpoint
+    setListMusic()
     await fetch(`http://127.0.0.1:8000/searchMusic/${keyword}`)
     .then(response => response.json())
     .then(data => {
