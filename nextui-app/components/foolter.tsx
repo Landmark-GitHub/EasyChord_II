@@ -216,7 +216,7 @@ const Footer = (props:any) => {
                         </div>
                     :
                         <div className="grid grid-cols-6 md:grid-cols-12 gap-4 items-center justify-center">     
-                            <div className="relative col-span-6 md:col-auto">
+                            <div className="relative col-span-6 md:col-auto hidden md:block">
                                 <Image
                                     alt="Album cover"
                                     className="w-full object-cover h-[100px]"

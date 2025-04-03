@@ -1,6 +1,7 @@
 "use client";
 import { useSearchParams } from 'next/navigation';
-import { Card, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardFooter, } from "@nextui-org/react";
+import Image from 'next/image';
 import { title } from "@/components/primitives";
 import { Pagination } from "@nextui-org/react";
 import { motion } from 'framer-motion';
@@ -107,31 +108,58 @@ const CardArea: React.FC<CardAreaProps> = ({ songData }) => {
 export default function Home() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
-  const [listMusic ,setListMusic] = useState()
+  const [listMusic, setListMusic] = useState<Song[]>([]);
 
   async function getListMusic() {
+    const link = `${process.env.NEXT_PUBLIC_BACKEND}/listMusic`
+    try{
+      const res = await fetch(link);
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await res.json();
+      setListMusic(data.music_list || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setListMusic([]);
+    }
     // Fetch data from the FastAPI endpoint
-    await fetch('http://127.0.0.1:8000/listMusic')
-    .then(response => response.json())
-    .then(data => {
-      // Set the fetched data to the state
-      console.log("list music is")
-      setListMusic(data.music_list);
-    })
-    .catch(error => console.error('Error fetching data:', error));
+    // await fetch('http://127.0.0.1:8000/listMusic')
+    // const link = `${process.env.NEXT_PUBLIC_BACKEND}/listMusic`
+    // await fetch(link)
+    // .then(response => response.json())
+    // .then(data => {
+    //   // Set the fetched data to the state
+    //   setListMusic(data.music_list);
+    // })
+    // .catch(error => console.error('Error fetching data:', error));
   }
 
   async function searchMusic(keyword: string){
-    // Fetch data from the FastAPI endpoint
-    setListMusic()
-    await fetch(`http://127.0.0.1:8000/searchMusic/${keyword}`)
-    .then(response => response.json())
-    .then(data => {
-      // Set the fetched data to the state
-      console.log(data)
+    const link = `${process.env.NEXT_PUBLIC_BACKEND}/searchMusic/${keyword}`
+    setListMusic([]);
+    console.log(link)
+    try{
+      const res = await fetch(link);
+      if (!res.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await res.json();
       setListMusic(data);
-    })
-    .catch(error => console.error('Error fetching data:', error));
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setListMusic([]);
+    }
+    // Fetch data from the FastAPI endpoint
+    // setListMusic()
+    // await fetch(link)
+    // .then(response => response.json())
+    // .then(data => {
+    //   // Set the fetched data to the state
+    //   console.log(data)
+    //   setListMusic(data);
+    // })
+    // .catch(error => console.error('Error fetching data:', error));
   }
 
   useEffect(() => {
@@ -145,7 +173,7 @@ export default function Home() {
   }, [keyword]);
 
   return (
-    <div className="flex flex-col items-center justify-center gap-4 my-20">
+    <div suppressHydrationWarning className="flex flex-col items-center justify-center gap-4 my-20">
       {keyword && <h1 className={title({ color: "violet" })}>{keyword}</h1>}
       <div className='pb-36 lg:pb-0 flex items-center justify-center'>
         {listMusic ? <CardArea songData={listMusic} /> : <h1>loading...</h1>}
